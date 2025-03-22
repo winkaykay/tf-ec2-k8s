@@ -35,6 +35,7 @@ resource "aws_instance" "k8s_master_instance" {
 
     aws_iam_instance_profile.control_plane_profile,
     aws_s3_bucket.k8s_join_bucket,
+    aws_nat_gateway.nat,
     random_string.s3name
   ]
 }
