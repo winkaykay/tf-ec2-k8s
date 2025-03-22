@@ -3,7 +3,7 @@
 
 #VPC
 resource "aws_vpc" "k8s_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "10.0.0.0/24"
 
   tags = {
     Name = "K8S VPC"
@@ -18,7 +18,7 @@ resource "random_shuffle" "az" {
 # Public Subnet
 resource "aws_subnet" "k8s_public_subnet" {
   vpc_id                  = aws_vpc.k8s_vpc.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = "10.0.0.0/27"
   availability_zone       = random_shuffle.az.result[0]
   map_public_ip_on_launch = true
 
@@ -30,7 +30,7 @@ resource "aws_subnet" "k8s_public_subnet" {
 # Private Subnet
 resource "aws_subnet" "k8s_private_subnet" {
   vpc_id            = aws_vpc.k8s_vpc.id
-  cidr_block        = "10.0.2.0/24"
+  cidr_block        = "10.0.0.32/27"
   availability_zone = random_shuffle.az.result[0]
 
   tags = {
