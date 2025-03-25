@@ -24,7 +24,10 @@ resource "aws_subnet" "k8s_public_subnet" {
 
   tags = {
     Name = "K8S Public Subnet"
+    "kubernetes.io/role/elb"  = 1
+    "kubernetes.io/cluster/kubernetes"	= "owned"
   }
+  
 }
 
 # Private Subnet
