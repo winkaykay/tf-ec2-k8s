@@ -5,6 +5,7 @@ resource "aws_instance" "jump_host" {
   key_name        = var.ami_key_pair_name
   subnet_id       = aws_subnet.k8s_public_subnet.id
   security_groups = [aws_security_group.jump_host_sg.id]
+  iam_instance_profile = aws_iam_instance_profile.jump_host_profile.name
 
   tags = {
     Name = "Jump-Host"
