@@ -6,6 +6,7 @@ resource "aws_instance" "jump_host" {
   subnet_id       = aws_subnet.k8s_public_subnet.id
   security_groups = [aws_security_group.jump_host_sg.id]
   iam_instance_profile = aws_iam_instance_profile.jump_host_profile.name
+   user_data = templatefile("scripts/install_kubectl_jumphost.sh", { bucket_name = "k8s-${random_string.s3name.result}" })
 
   tags = {
     Name = "Jump-Host"

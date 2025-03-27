@@ -11,6 +11,14 @@ resource "aws_security_group" "jump_host_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+ # Allow all internal traffic within VPC
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/24"]
+  }
+  
   # Allow all outbound traffic
   egress {
     from_port   = 0

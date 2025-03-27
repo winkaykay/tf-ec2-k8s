@@ -127,8 +127,13 @@ kubeadm token create --print-join-command > /home/ubuntu/join_command.sh
 sleep 2
 
 # Install Calico network plugin
-sudo -u ubuntu bash -c 'kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml'
+#sudo -u ubuntu bash -c 'kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml'
+#sleep 5
+
+sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml'
+sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml'
 sleep 5
+
  
 # Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -138,3 +143,6 @@ sleep 2
 
 # Upload Join Command to S3
 aws s3 cp /home/ubuntu/join_command.sh s3://${bucket_name}/join_command.sh
+sleep 2
+aws s3 cp /home/ubuntu/.kube/config s3://${bucket_name}/config
+echo "Upload Completed'
