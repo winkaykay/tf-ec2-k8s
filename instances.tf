@@ -11,6 +11,13 @@ resource "aws_instance" "jump_host" {
   tags = {
     Name = "Jump-Host"
   }
+  depends_on = [
+
+    aws_instance.k8s_master_instance,
+    aws_iam_instance_profile.jump_host_profile,
+    aws_s3_bucket.k8s_join_bucket,
+    random_string.s3name
+  ]
 }
 
 # Kubernetes Master in Private Subnet
