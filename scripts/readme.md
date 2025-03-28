@@ -14,3 +14,6 @@ ssh -i my-key.pem ubuntu@<K8S_Master_Private_IP>
 kubectl get nodes
 
 kubectl label node k8s-wrk-1  node-role.kubernetes.io/worker=worker
+
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes enableServiceMutatorWebhook=false^C

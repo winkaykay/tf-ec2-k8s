@@ -91,10 +91,9 @@ resource "aws_iam_policy" "s3_write_policy" {
     Version = "2012-10-17",
     Statement = [{
       Effect   = "Allow"
-      //Action   = ["s3:PutObject"]
-      //Resource = ["arn:aws:s3:::k8s-${random_string.s3name.result}", "arn:aws:s3:::k8s-${random_string.s3name.result}/*"]
-      Action   = "*",
-      Resource = "*"
+      Action   = ["s3:PutObject"]
+      Resource = ["arn:aws:s3:::k8s-${random_string.s3name.result}", "arn:aws:s3:::k8s-${random_string.s3name.result}/*"]
+      
     }]
   })
 }

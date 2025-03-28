@@ -33,7 +33,7 @@ sudo ./aws/install
 sleep 1m
 
 mkdir /home/ubuntu/.kube
-aws s3 cp s3://${bucket_name}/config /home/ubuntu/.kube/config
+sudo aws s3 cp s3://${bucket_name}/config /home/ubuntu/.kube/config
 sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
 
 

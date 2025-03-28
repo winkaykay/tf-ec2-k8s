@@ -13,7 +13,7 @@ variable "ami_key_pair_name" { #Todo: uncomment the default value and add your p
 }
 variable "number_of_worker" {
   description = "number of worker instances to be join on cluster."
-  default     = 1
+  default     = 2
 }
 
 variable "region" {
