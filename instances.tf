@@ -35,7 +35,7 @@ resource "aws_instance" "k8s_master_instance" {
     delete_on_termination = true
   }
   tags = {
-    Name = "k8s_msr_1"
+    Name = "k8s-msr-1"
   }
 
   user_data = templatefile("scripts/install_k8s_msr.sh", { bucket_name = "k8s-${random_string.s3name.result}" })
@@ -66,7 +66,7 @@ resource "aws_instance" "k8s_instance_wrk" {
     delete_on_termination = true
   }
   tags = {
-    Name = "k8s_wrk_${count.index + 1}"
+    Name = "k8s-wrk-${count.index + 1}"
   }
   user_data = templatefile("scripts/install_k8s_worker.sh", {
 

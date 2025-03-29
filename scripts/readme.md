@@ -16,4 +16,15 @@ kubectl get nodes
 kubectl label node k8s-wrk-1  node-role.kubernetes.io/worker=worker
 
 
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes enableServiceMutatorWebhook=false^C
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+#Install aws-load-balancer controller
+helm repo add eks https://aws.github.io/eks-charts
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes -- set enableServiceMutatorWebhook=false
+
+
+kubectl patch node k8s-wrk-1 -p '{"spec":{"providerID":"aws:///us-east-1/i-0cc246ec54ca1b96b"}}'
+kubectl patch node k8s-wrk-2 -p '{"spec":{"providerID":"aws:///us-east-1/i-0413907e1528a2207"}}'
+
