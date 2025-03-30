@@ -30,7 +30,7 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 # to insure the join command start when the installion of master node is done.
-sleep 1m
+sleep 2m
 
 mkdir /home/ubuntu/.kube
 sudo aws s3 cp s3://${bucket_name}/config /home/ubuntu/.kube/config

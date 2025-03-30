@@ -102,7 +102,7 @@ sudo ./aws/install
 sleep 2
 
 # to insure the join command start when the installion of master node is done.
-sleep 1m
+sleep 2m
 
 # Fetch Join Command from S3
 aws s3 cp s3://${bucket_name}/join_command.sh /home/ubuntu/join_command.sh

@@ -130,9 +130,9 @@ sleep 2
 #sudo -u ubuntu bash -c 'kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml'
 #sleep 5
 
-sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml'
 sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml'
-sleep 5
+sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml'
+sleep 10
 
  
 # Install AWS CLI
