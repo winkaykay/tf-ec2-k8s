@@ -1,6 +1,22 @@
+data "aws_ami" "latest_ami" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023*-x86_64"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["amazon"]
+}
+
+
 # Jump Host (Bastion) in Public Subnet
 resource "aws_instance" "jump_host" {
-  ami             = var.ami_id # Ubuntu AMI
+  ami             = data.aws_ami.latest_ami.id# AWS AMI
   instance_type   = var.jump_host_instance_type
   key_name        = var.ami_key_pair_name
   subnet_id       = aws_subnet.k8s_public_subnet.id
@@ -22,7 +38,7 @@ resource "aws_instance" "jump_host" {
 
 # Kubernetes Master in Private Subnet
 resource "aws_instance" "k8s_master_instance" {
-  ami                         = var.ami_id
+  ami                         = data.aws_ami.latest_ami.id# AWS AMI
   subnet_id                   = aws_subnet.k8s_private_subnet.id
   instance_type               = var.instance_type
   key_name                    = var.ami_key_pair_name
@@ -52,7 +68,7 @@ resource "aws_instance" "k8s_master_instance" {
 
 # Kubernetes Workers in Private Subnet
 resource "aws_instance" "k8s_instance_wrk" {
-  ami                         = var.ami_id
+  ami                         = data.aws_ami.latest_ami.id# AWS AMI
   count                       = var.number_of_worker
   subnet_id                   = aws_subnet.k8s_private_subnet.id
   instance_type               = var.instance_type
