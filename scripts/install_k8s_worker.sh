@@ -108,38 +108,38 @@ case "$ARCH" in
     "x86_64")
         #install containerd
         echo "Installing containerd..."
-        wget -q "https://github.com/containerd/containerd/releases/download/v$${CONTAINERD_VERSION}/containerd-$${CONTAINERD_VERSION}-linux-amd64.tar.gz"
-        tar Cxzf /usr/local "containerd-$${CONTAINERD_VERSION}-linux-amd64.tar.gz"
+        wget -q "https://github.com/containerd/containerd/releases/download/v$CONTAINERD_VERSION/containerd-$CONTAINERD_VERSION-linux-amd64.tar.gz"
+        tar Cxzf /usr/local "containerd-$CONTAINERD_VERSION-linux-amd64.tar.gz"
         if ! command -v containerd >/dev/null 2>&1; then
             echo "containerd installation failed"
             exit 1
         fi
         mkdir -p /usr/local/lib/systemd/system/
         curl -o /usr/local/lib/systemd/system/containerd.service https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
-        rm "containerd-$${CONTAINERD_VERSION}-linux-amd64.tar.gz"
+        rm "containerd-$CONTAINERD_VERSION-linux-amd64.tar.gz"
         systemctl daemon-reload
         systemctl enable --now containerd
         
         #install runc
         echo "Installing runc..."
-        wget -q "https://github.com/opencontainers/runc/releases/download/$${RUNC_VERSION}/runc.amd64"
+        wget -q "https://github.com/opencontainers/runc/releases/download/$RUNC_VERSION/runc.amd64"
         install -m 755 runc.amd64 /usr/local/sbin/runc
         
         #install cni plugins
         echo "Installing CNI plugin..."
         mkdir -p /opt/cni/bin
-        wget -q "https://github.com/containernetworking/plugins/releases/download/$${CNI_VERSION}/cni-plugins-linux-amd64-$${CNI_VERSION}.tgz"
-        tar Cxzf /opt/cni/bin "cni-plugins-linux-amd64-$${CNI_VERSION}.tgz"
-        rm "cni-plugins-linux-amd64-$${CNI_VERSION}.tgz"
+        wget -q "https://github.com/containernetworking/plugins/releases/download/$CNI_VERSION/cni-plugins-linux-amd64-$CNI_VERSION.tgz"
+        tar Cxzf /opt/cni/bin "cni-plugins-linux-amd64-$CNI_VERSION.tgz"
+        rm "cni-plugins-linux-amd64-$CNI_VERSION.tgz"
         ;;
 
     "aarch64")
 
         #install containerd
         echo "Installing containerd..."
-        wget -q "https://github.com/containerd/containerd/releases/download/$${CONTAINERD_VERSION}/containerd-$${CONTAINERD_VERSION}-linux-arm64.tar.gz"
-        tar Cxzf /usr/local "containerd-$${CONTAINERD_VERSION}-linux-arm64.tar.gz"
-        rm "containerd-$${CONTAINERD_VERSION}-linux-arm64.tar.gz"
+        wget -q "https://github.com/containerd/containerd/releases/download/$CONTAINERD_VERSION/containerd-$CONTAINERD_VERSION-linux-arm64.tar.gz"
+        tar Cxzf /usr/local "containerd-$CONTAINERD_VERSION-linux-arm64.tar.gz"
+        rm "containerd-$CONTAINERD_VERSION-linux-arm64.tar.gz"
         if ! command -v containerd >/dev/null 2>&1; then
             echo "containerd installation failed"
             exit 1
@@ -151,15 +151,15 @@ case "$ARCH" in
         
         #install runc
         echo "Installing runc..."
-        wget -q "https://github.com/opencontainers/runc/releases/download/$${RUNC_VERSION}/runc.arm64"
+        wget -q "https://github.com/opencontainers/runc/releases/download/$RUNC_VERSION/runc.arm64"
         install -m 755 runc.arm64 /usr/local/sbin/runc
         
         #install cni plugins
         echo "Installing CNI plugin..."
         mkdir -p /opt/cni/bin
-        wget -q "https://github.com/containernetworking/plugins/releases/download/$${CNI_VERSION}/cni-plugins-linux-arm64-$${CNI_VERSION}.tgz"
-        tar Cxzf /opt/cni/bin "cni-plugins-linux-arm64-$${CNI_VERSION}.tgz"
-        rm "cni-plugins-linux-arm64-$${CNI_VERSION}.tgz"
+        wget -q "https://github.com/containernetworking/plugins/releases/download/$CNI_VERSION/cni-plugins-linux-arm64-$CNI_VERSION.tgz"
+        tar Cxzf /opt/cni/bin "cni-plugins-linux-arm64-$CNI_VERSION.tgz"
+        rm "cni-plugins-linux-arm64-$CNI_VERSION.tgz"
         ;;
     *)
         echo "Unsupported architecture: $ARCH"
@@ -198,8 +198,8 @@ RELEASE="$${RELEASE%.*}"
 case "$OS" in
     "ubuntu"|"debian")
         install_packages apt-transport-https ca-certificates curl gpg
-        curl -fsSL "https://pkgs.k8s.io/core:/stable:/$${RELEASE}/deb/Release.key" | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-        echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$${RELEASE}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list
+        curl -fsSL "https://pkgs.k8s.io/core:/stable:/$RELEASE/deb/Release.key" | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$RELEASE/deb/ /" > /etc/apt/sources.list.d/kubernetes.list
         apt-get update -qq
         install_packages kubelet kubeadm
         apt-mark hold kubelet kubeadm
@@ -212,10 +212,10 @@ case "$OS" in
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/$${RELEASE}/rpm/
+baseurl=https://pkgs.k8s.io/core:/stable:/$RELEASE/rpm/
 enabled=1
 gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/$${RELEASE}/rpm/repodata/repomd.xml.key
+gpgkey=https://pkgs.k8s.io/core:/stable:/$RELEASE/rpm/repodata/repomd.xml.key
 EOF
         install_packages kubelet kubeadm
 
