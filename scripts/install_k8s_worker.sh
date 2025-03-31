@@ -86,7 +86,7 @@ esac
 ARCH=$(uname -m)
 echo "Detected architecture: $ARCH"
 
-CONTAINERD_VERSION=$$(curl -sSL "https://api.github.com/repos/containerd/containerd/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
+CONTAINERD_VERSION=$(curl -sSL "https://api.github.com/repos/containerd/containerd/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
 if [[ -z "$CONTAINERD_VERSION" ]]; then
     echo "Failed to fetch CNI version"
     exit 1
