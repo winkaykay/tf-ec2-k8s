@@ -243,6 +243,7 @@ echo "Initializing control plane..."
 kubeadm init --pod-network-cidr=192.168.0.0/16
 
 echo "Configuring kubectl for user..."
+USER='ec2-user'
 USER_HOME=$(eval echo ~${SUDO_USER:-$USER}) 
 mkdir -p "$USER_HOME/.kube"
 cp -i /etc/kubernetes/admin.conf "$USER_HOME/.kube/config"
