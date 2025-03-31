@@ -2,13 +2,13 @@
 ## Option 1 - Remote via SSH forwarding
 eval $(ssh-agent)
 ssh-add k8s-key-us-east-1.pem
-ssh -A ubuntu@<Jump_Host_Public_IP>
-ssh ubuntu@<K8S_Master_Private_IP>
+ssh -A ec2-user@<Jump_Host_Public_IP>
+ssh ec2-user@<K8S_Master_Private_IP>
 
 ## Option 2 - Remote via copy private key
-scp -i my-key.pem my-key.pem ubuntu@<Jump_Host_Public_IP:~/
-ssh -i my-key.pem ubuntu@<Jump_Host_Public_IP>
-ssh -i my-key.pem ubuntu@<K8S_Master_Private_IP>
+scp -i my-key.pem my-key.pem ec2-user@<Jump_Host_Public_IP:~/
+ssh -i my-key.pem ec2-user@<Jump_Host_Public_IP>
+ssh -i my-key.pem ec2-user@<K8S_Master_Private_IP>
 
 # 2. verify nodes
 kubectl get nodes
@@ -22,7 +22,7 @@ chmod 700 get_helm.sh
 
 #Install aws-load-balancer controller
 helm repo add eks https://aws.github.io/eks-charts
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes --set enableServiceMutatorWebhook=false
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes 
 
 
 kubectl patch node k8s-wrk-1 -p '{"spec":{"providerID":"aws:///us-east-1/i-004be7d5f0bc03edf"}}'

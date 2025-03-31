@@ -105,10 +105,10 @@ sleep 2
 sleep 2m
 
 # Fetch Join Command from S3
-aws s3 cp s3://${bucket_name}/join_command.sh /home/ubuntu/join_command.sh
+aws s3 cp s3://${bucket_name}/join_command.sh /home/ec2-user/join_command.sh
 sleep 2
 
 # Execute Join Command
-chmod +x /home/ubuntu/join_command.sh
-sudo /home/ubuntu/join_command.sh
+chmod +x /home/ec2-user/join_command.sh
+sudo /home/ec2-user/join_command.sh
   

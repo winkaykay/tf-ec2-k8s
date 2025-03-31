@@ -117,22 +117,22 @@ else
 fi
 
 # create the kubeconfig in master to use kubectl to interact with cluster API.
-mkdir -p /home/ubuntu/.kube
-sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+mkdir -p /home/ec2-user/.kube
+sudo cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
+sudo chown ec2-user:ec2-user /home/ec2-user/.kube/config
 sleep 5
 
 # Create Join Command for Workers
-kubeadm token create --print-join-command > /home/ubuntu/join_command.sh
+kubeadm token create --print-join-command > /home/ec2-user/join_command.sh
 sleep 2
 
 # Install Calico network plugin
-#sudo -u ubuntu bash -c 'kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml'
+#sudo -u ec2-user bash -c 'kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml'
 #sleep 5
 
-sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml' || true
-sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml'
-sudo -u ubuntu bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml'
+sudo -u ec2-user bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml' || true
+sudo -u ec2-user bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml'
+sudo -u ec2-user bash -c 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml'
 sleep 10
 
  
@@ -143,7 +143,7 @@ sudo ./aws/install
 sleep 2
 
 # Upload Join Command to S3
-aws s3 cp /home/ubuntu/join_command.sh s3://${bucket_name}/join_command.sh
+aws s3 cp /home/ec2-user/join_command.sh s3://${bucket_name}/join_command.sh
 sleep 2
-aws s3 cp /home/ubuntu/.kube/config s3://${bucket_name}/config
+aws s3 cp /home/ec2-user/.kube/config s3://${bucket_name}/config
 echo "Upload Completed'

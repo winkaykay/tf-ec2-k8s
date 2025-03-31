@@ -32,9 +32,9 @@ sudo ./aws/install
 # to insure the join command start when the installion of master node is done.
 sleep 2m
 
-mkdir /home/ubuntu/.kube
-sudo aws s3 cp s3://${bucket_name}/config /home/ubuntu/.kube/config
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+mkdir /home/ec2-user/.kube
+sudo aws s3 cp s3://${bucket_name}/config /home/ec2-user/.kube/config
+sudo chown ec2-user:ec2-user /home/ec2-user/.kube/config
 
 
 echo "Kubernetes setup completed."
