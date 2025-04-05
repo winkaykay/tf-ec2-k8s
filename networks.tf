@@ -21,7 +21,7 @@ resource "aws_subnet" "k8s_public_subnet" {
 
   vpc_id                  = aws_vpc.k8s_vpc.id
   cidr_block              = cidrsubnet(var.cidr_block, 8, count.index * 10)
-  availability_zone       = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
 
   tags = {
@@ -39,7 +39,7 @@ resource "aws_subnet" "k8s_private_subnet" {
 
   vpc_id            = aws_vpc.k8s_vpc.id
   cidr_block        = cidrsubnet(var.cidr_block, 8, 100 + count.index * 10)
-  availability_zone = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "${var.vpc_name}-private-${count.index + 1}" 
