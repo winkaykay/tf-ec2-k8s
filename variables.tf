@@ -14,7 +14,7 @@ variable "vpc_name" {
 
 variable "cidr_block" {
   
-  default = "10.0.0.0/24"
+  default = "10.0.0.0/16"
 }
 
 variable "ami_key_pair_name" { #Todo: uncomment the default value and add your pem key pair name. Hint: don't write '.pem' exction just the key name
