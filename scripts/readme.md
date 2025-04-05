@@ -25,6 +25,6 @@ helm repo add eks https://aws.github.io/eks-charts
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=kubernetes 
 
 
-kubectl patch node k8s-wrk-1 -p '{"spec":{"providerID":"aws:///us-east-1/i-004be7d5f0bc03edf"}}'
-kubectl patch node k8s-wrk-2 -p '{"spec":{"providerID":"aws:///us-east-1/i-072a7c3eb4a689e8c"}}'
+kubectl patch node k8s-wrk-1 -p '{"spec":{"providerID":"aws:///us-east-1/i-0e8fca14088e41f30"}}'
+kubectl patch node k8s-wrk-2 -p '{"spec":{"providerID":"aws:///us-east-1/i-0c6675587e2ca6838"}}'
 
