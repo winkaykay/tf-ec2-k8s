@@ -19,7 +19,7 @@ resource "aws_instance" "jump_host" {
   ami             = data.aws_ami.latest_ami.id# AWS AMI
   instance_type   = var.jump_host_instance_type
   key_name        = var.ami_key_pair_name
-  subnet_id       = aws_subnet.k8s_public_subnet.id
+  subnet_id       = aws_subnet.k8s_public_subnet[0].id
   security_groups = [aws_security_group.jump_host_sg.id]
   iam_instance_profile = aws_iam_instance_profile.jump_host_profile.name
    user_data = templatefile("scripts/install_kubectl_jumphost.sh", { bucket_name = "k8s-${random_string.s3name.result}" })
@@ -39,7 +39,7 @@ resource "aws_instance" "jump_host" {
 # Kubernetes Master in Private Subnet
 resource "aws_instance" "k8s_master_instance" {
   ami                         = data.aws_ami.latest_ami.id# AWS AMI
-  subnet_id                   = aws_subnet.k8s_private_subnet.id
+  subnet_id                   = aws_subnet.k8s_private_subnet[0].id
   instance_type               = var.instance_type
   key_name                    = var.ami_key_pair_name
   associate_public_ip_address = false
@@ -70,7 +70,7 @@ resource "aws_instance" "k8s_master_instance" {
 resource "aws_instance" "k8s_instance_wrk" {
   ami                         = data.aws_ami.latest_ami.id# AWS AMI
   count                       = var.number_of_worker
-  subnet_id                   = aws_subnet.k8s_private_subnet.id
+  subnet_id                   = aws_subnet.k8s_private_subnet[1].id
   instance_type               = var.instance_type
   key_name                    = var.ami_key_pair_name
   associate_public_ip_address = false

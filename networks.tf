@@ -3,10 +3,11 @@
 
 #VPC
 resource "aws_vpc" "k8s_vpc" {
-  cidr_block = "10.0.0.0/24"
+  cidr_block = var.cidr_block
+  enable_dns_hostnames = true
 
   tags = {
-    Name = "K8S VPC"
+    Name = var.vpc_name
   }
 }
 # Generate Random AWS Zone
@@ -17,13 +18,16 @@ resource "random_shuffle" "az" {
 
 # Public Subnet
 resource "aws_subnet" "k8s_public_subnet" {
+
+  count =2
+
   vpc_id                  = aws_vpc.k8s_vpc.id
-  cidr_block              = "10.0.0.0/27"
+  cidr_block              = cidrsubnet(var.cidr_block, 8, count.index * 10)
   availability_zone       = random_shuffle.az.result[0]
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "K8S Public Subnet"
+    Name = "${var.vpc_name}-public-${count.index + 1}"
     "kubernetes.io/role/elb"  = 1
     "kubernetes.io/cluster/kubernetes"	= "owned"
   }
@@ -32,22 +36,24 @@ resource "aws_subnet" "k8s_public_subnet" {
 
 # Private Subnet
 resource "aws_subnet" "k8s_private_subnet" {
+
+  count=2
+
   vpc_id            = aws_vpc.k8s_vpc.id
-  cidr_block        = "10.0.0.32/27"
+  cidr_block        = cidrsubnet(var.cidr_block, 8, 100 + count.index * 10)
   availability_zone = random_shuffle.az.result[0]
 
   tags = {
-    Name = "K8S Private Subnet"
+    Name = "${var.vpc_name}-private-${count.index + 1}" 
   }
 }
-
 
 # Internet Gateway
 resource "aws_internet_gateway" "k8s_ig" {
   vpc_id = aws_vpc.k8s_vpc.id
 
   tags = {
-    Name = "K8S Internet Gateway"
+    Name = "${var.vpc_name}-igw" 
   }
 }
 
@@ -60,15 +66,19 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "k8s-public-route-table"
+    Name = "${var.vpc_name}-public-rt"
   }
 }
 
 # Associate Route Table with Public Subnet
 resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.k8s_public_subnet.id
+  count=2 
+  
+  subnet_id      = aws_subnet.k8s_public_subnet[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
+
+
 
 
 # Create an Elastic IP (EIP)
@@ -76,17 +86,17 @@ resource "aws_eip" "nat_eip" {
   domain = "vpc"
 
   tags = {
-    Name = "k8s-eip"
+    Name = "${var.vpc_name}-eip"
   }
 }
 
 # Create a NAT Gateway in the Public Subnet:
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.k8s_public_subnet.id
+  subnet_id     = aws_subnet.k8s_public_subnet[0].id
 
   tags = {
-    Name = "k8s-net"
+    Name = "${var.vpc_name}-nat"
   }
 }
 
@@ -99,13 +109,16 @@ resource "aws_route_table" "private_rt" {
     nat_gateway_id = aws_nat_gateway.nat.id
   }
   tags = {
-    Name = "k8s-private-route-table"
+    Name = "${var.vpc_name}-private-rt"
   }
 }
 
 # Associate the Route Table with the Private Subnet
 resource "aws_route_table_association" "private_assoc" {
-  subnet_id      = aws_subnet.k8s_private_subnet.id
+
+  count = 2
+
+  subnet_id      = aws_subnet.k8s_private_subnet[count.index].id
   route_table_id = aws_route_table.private_rt.id
 }
 

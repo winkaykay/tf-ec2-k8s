@@ -8,6 +8,15 @@
 #   default     = ""
 # }
 
+variable "vpc_name" {
+  default = "hellobaghub-k8s" #the jump host to access k8s cluster
+}
+
+variable "cidr_block" {
+  
+  default = "10.0.0.0/24"
+}
+
 variable "ami_key_pair_name" { #Todo: uncomment the default value and add your pem key pair name. Hint: don't write '.pem' exction just the key name
   default = "k8s-key-us-east-1"
 }
